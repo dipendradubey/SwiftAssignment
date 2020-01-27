@@ -11,3 +11,7 @@ import Foundation
 struct Cell {
     static let identifier = "cellIdentifier"
 }
+
+struct Api {
+    static let about = "https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json"
+}

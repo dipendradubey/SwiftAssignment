@@ -16,6 +16,32 @@ class CountryTableViewController: UITableViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        ServiceManager().fetchData(Api.about) {[weak self] (response: Result<Info, Error>) in
+            switch response{
+            case .success (let res):
+                print(res)
+                
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self?.showAlert(error.localizedDescription)
+                }
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func showAlert(_ message: String){
+       let alertVC = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "OK", style: .default) { [weak self](alertAction) in
+            self?.dismiss(animated: true, completion: nil)
+        }
+        alertVC.addAction(alertAction)
+        present(alertVC, animated: true, completion: nil)
+    }
+    
 }
 
 extension CountryTableViewController{
@@ -25,6 +51,7 @@ extension CountryTableViewController{
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Cell.identifier, for: indexPath) as! CustomCell
+        cell.picture.contentMode = .scaleAspectFit
         cell.picture.image = UIImage(named: "flower")
         cell.lblName.text = "\(indexPath.row)"
         cell.lblDesc.text = "\(indexPath.row)"
@@ -66,18 +93,19 @@ class CustomCell: UITableViewCell{
         
         picture.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         picture.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10).isActive = true
-        picture.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        picture.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive = true
+        //picture.widthAnchor.constraint(equalToConstant: 100).isActive = true
         picture.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        picture.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
+        //picture.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
         
-        lblName.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
-        lblName.leftAnchor.constraint(equalTo: picture.rightAnchor, constant: 10).isActive = true
+        lblName.topAnchor.constraint(equalTo: picture.bottomAnchor, constant: 10).isActive = true
+        lblName.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10).isActive = true
         lblName.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive = true
         
         lblDesc.topAnchor.constraint(equalTo: lblName.bottomAnchor, constant: 10).isActive = true
         lblDesc.leftAnchor.constraint(equalTo: lblName.leftAnchor).isActive = true
         lblDesc.rightAnchor.constraint(equalTo: lblName.rightAnchor).isActive = true
-        //lblDesc.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
+        lblDesc.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
