@@ -9,6 +9,7 @@
 import XCTest
 @testable import SwiftAssignment
 
+
 class SwiftAssignmentTests: XCTestCase {
 
     override func setUp() {
@@ -19,9 +20,16 @@ class SwiftAssignmentTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testInfo() {
+        let infoList1 = InfoList(title: nil, description: nil, imageHref: nil)
+        let infoList2 = InfoList(title: "abc", description: "def", imageHref: nil)
+        
+        let arrInfoList = [infoList1, infoList2]
+        var arrInfoModel = arrInfoList.map {return InfoModel($0)}
+        arrInfoModel = arrInfoModel.filter({ (arrInfoModel) -> Bool in
+            return arrInfoModel.name.count > 0
+        })
+        XCTAssert(arrInfoModel.count == 1, "Nil value shouldn't be considered")
     }
 
     func testPerformanceExample() {

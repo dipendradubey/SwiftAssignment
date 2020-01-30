@@ -9,17 +9,6 @@
 import Foundation
 import Alamofire
 
-struct Info: Codable{
-    let title: String
-    let rows: [InfoList]
-}
-
-struct InfoList: Codable {
-    let title: String?
-    let description: String?
-    let imageHref: String?
-}
-
 class ServiceManager{
     
     //Alomfire tutorial https://codewithchris.com/alamofire/
@@ -32,7 +21,6 @@ class ServiceManager{
                 completionHandler(.failure(data.error!))
                 return
             }
-            
             
             let data = String(decoding: data.data!, as: UTF8.self).data(using: .utf8)
             let jsonDecoder = JSONDecoder()

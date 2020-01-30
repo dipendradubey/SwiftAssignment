@@ -1,65 +1,13 @@
 //
-//  ViewController.swift
+//  CustomCell.swift
 //  SwiftAssignment
 //
-//  Created by Dipendra Dubey on 21/01/20.
+//  Created by Dipendra Dubey on 29/01/20.
 //  Copyright © 2020 Dipendra. All rights reserved.
 //
 
+import Foundation
 import UIKit
-
-class CountryTableViewController: UITableViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = "Author"
-        tableView.register(CustomCell.self, forCellReuseIdentifier: Cell.identifier)
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 100
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        ServiceManager().fetchData(Api.about) {[weak self] (response: Result<Info, Error>) in
-            switch response{
-            case .success (let res):
-                print(res)
-                
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    self?.showAlert(error.localizedDescription)
-                }
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
-    func showAlert(_ message: String){
-       let alertVC = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        let alertAction = UIAlertAction(title: "OK", style: .default) { [weak self](alertAction) in
-            self?.dismiss(animated: true, completion: nil)
-        }
-        alertVC.addAction(alertAction)
-        present(alertVC, animated: true, completion: nil)
-    }
-    
-}
-
-extension CountryTableViewController{
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Cell.identifier, for: indexPath) as! CustomCell
-        cell.picture.contentMode = .scaleAspectFit
-        cell.picture.image = UIImage(named: "flower")
-        cell.lblName.text = "\(indexPath.row)"
-        cell.lblDesc.text = "\(indexPath.row)"
-        
-        return cell
-    }
-}
-
 
 class CustomCell: UITableViewCell{
     
